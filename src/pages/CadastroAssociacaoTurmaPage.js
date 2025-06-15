@@ -81,8 +81,8 @@ const AssociarTurmaPage = () => {
         </select>
         <br /><br />
 
-        <button type="submit" className="btn btn-primary">Associar</button>
-        <button type="button" className="btn btn-cancel" onClick={() => navigate('/turmas')}>Cancelar</button>
+        <button type="submit" className="btn btn-primary"onClick={() => navigate('/turmas/associacao')}>Associar</button>
+        <button type="button" className="btn btn-cancel" onClick={() => navigate('/turmas/associacao')}>Cancelar</button>
       </form>
     </div>
   );
