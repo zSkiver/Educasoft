@@ -56,9 +56,9 @@ const Professor = require('./professor');
 const Disciplina = require('./disciplina');
 const Local = require('./salaModel');
 
-Turma.belongsTo(Professor, { foreignKey: 'idProfessor' });
-Turma.belongsTo(Disciplina, { foreignKey: 'idDisciplina' });
-Turma.belongsTo(Local, { foreignKey: 'idLocal', as: 'Local' }); 
+Turma.belongsTo(Professor, { foreignKey: 'idProfessor', as: 'professor' });
+Turma.belongsTo(Disciplina, { foreignKey: 'idDisciplina', as: 'disciplina' });
+Turma.belongsTo(Local, { foreignKey: 'idLocal', as: 'sala' }); 
 
 Turma.belongsToMany(require('./aluno'), {
   through: 'turma_has_aluno',

@@ -22,8 +22,11 @@ import AlunosPage from './pages/AlunosPage';
 import CadastroAlunoPage from './pages/CadastroAlunoPage';
 import AttAlunoPage from './pages/AttAlunoPage';
 import ReativarAlunosPage from './pages/ReativarAlunosPage';
-import AssociarTurmasPage from './pages/AssociarTurmaPage';
+import CadastroAssociacaoTurmaPage from './pages/CadastroAssociacaoTurmaPage';
 import AssociacaoPage from './pages/AssociacaoPage';
+import ReativarAssociacaoTurmaPage from './pages/ReativarAssociacaoTurmaPage';
+import AttAssociacaoPage from './pages/AttAssociacaoPage';
+
 
 import './App.css';
 
@@ -80,7 +83,6 @@ function App() {
             <Route path="/turmas/nova" element={<CadastroTurmaPage />} />
             <Route path="/turmas/reativar" element={<ReativarTurmaPage />} />
             <Route path="/turmas/editar/:id" element={<AttTurmaPage />} />
-            <Route path="/turmas/associar/:id" element={<AssociarTurmasPage/>} />
             <Route path="/turmas/associacao" element={<AssociacaoPage/>} />
             
 
@@ -91,7 +93,9 @@ function App() {
             <Route path="/alunos/reativar" element={<ReativarAlunosPage />} />
 
             {/* associar */}
-
+            <Route path="/turmas/novaAssociacao/:id" element={<CadastroAssociacaoTurmaPage/>} />
+            <Route path="/turmas/associacoes/reativar" element={<ReativarAssociacaoTurmaPage />} />
+            <Route path="/turmas/associacoes/editar/:idTurma/:matricula" element={<AttAssociacaoPage />} />
 
           </Routes>
         </main>

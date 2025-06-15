@@ -1,16 +1,17 @@
 const turmaModel = require("../models/turmaModel");
 const Professor = require("../models/professor");
 const Disciplina = require("../models/disciplina");
-const Local = require("../models/salaModel");
+const Sala = require("../models/salaModel");
+const TurmaHasAluno = require("../models/turmaHasAluno");
 
 exports.getAll = async (req, res) => {
   try {
     const turmas = await turmaModel.findAll({
       where: { ativo: true },
       include: [
-        { model: Professor },
-        { model: Disciplina },
-        { model: Local, as: "Local" }
+        { model: Professor, as: 'professor', attributes: ['nome'], required: false },
+        { model: Disciplina, as: 'disciplina', attributes: ['nome'], required: false },
+        { model: Sala, as: 'sala', attributes: ['nome', 'local'], required: false }
       ]
     });
 
@@ -22,11 +23,11 @@ exports.getAll = async (req, res) => {
       horario: t.horario,
       horario_termino: t.horario_termino,
       idProfessor: t.idProfessor,
-      nomeProfessor: t.Professor?.nome ?? "Não informado",
+      nomeProfessor: t.professor?.nome ?? "Não informado",
       idDisciplina: t.idDisciplina,
-      nomeDisciplina: t.Disciplina?.nome ?? "Não informado",
+      nomeDisciplina: t.disciplina?.nome ?? "Não informado",
       idLocal: t.idLocal,
-      nomeLocal: t.Local ? `${t.Local.nome} - ${t.Local.local ?? ""}` : "Não informado",
+      nomeLocal: t.sala ? `${t.sala.nome} - ${t.sala.local ?? ""}` : "Não informado",
       ativo: t.ativo
     }));
 
@@ -42,9 +43,9 @@ exports.getInactive = async (req, res) => {
     const turmas = await turmaModel.findAll({
       where: { ativo: false },
       include: [
-        { model: Professor },
-        { model: Disciplina },
-        { model: Local, as: "Local" }
+        { model: Professor, as: 'professor', attributes: ['nome'], required: false },
+        { model: Disciplina, as: 'disciplina', attributes: ['nome'], required: false },
+        { model: Sala, as: 'sala', attributes: ['nome', 'local'], required: false }
       ]
     });
 
@@ -56,11 +57,11 @@ exports.getInactive = async (req, res) => {
       horario: t.horario,
       horario_termino: t.horario_termino,
       idProfessor: t.idProfessor,
-      nomeProfessor: t.Professor?.nome ?? "Não informado",
+      nomeProfessor: t.professor?.nome ?? "Não informado",
       idDisciplina: t.idDisciplina,
-      nomeDisciplina: t.Disciplina?.nome ?? "Não informado",
+      nomeDisciplina: t.disciplina?.nome ?? "Não informado",
       idLocal: t.idLocal,
-      nomeLocal: t.Local ? `${t.Local.nome} - ${t.Local.local ?? ""}` : "Não informado",
+      nomeLocal: t.sala ? `${t.sala.nome} - ${t.sala.local ?? ""}` : "Não informado",
       ativo: t.ativo
     }));
 
@@ -80,9 +81,9 @@ exports.getById = async (req, res) => {
 
     const t = await turmaModel.findByPk(id, {
       include: [
-        { model: Professor },
-        { model: Disciplina },
-        { model: Local, as: "Local" }
+        { model: Professor, as: 'professor', attributes: ['nome'], required: false },
+        { model: Disciplina, as: 'disciplina', attributes: ['nome'], required: false },
+        { model: Sala, as: 'sala', attributes: ['nome', 'local'], required: false }
       ]
     });
 
@@ -95,11 +96,11 @@ exports.getById = async (req, res) => {
         horario: t.horario,
         horario_termino: t.horario_termino,
         idProfessor: t.idProfessor,
-        nomeProfessor: t.Professor?.nome ?? "Não informado",
+        nomeProfessor: t.professor?.nome ?? "Não informado",
         idDisciplina: t.idDisciplina,
-        nomeDisciplina: t.Disciplina?.nome ?? "Não informado",
+        nomeDisciplina: t.disciplina?.nome ?? "Não informado",
         idLocal: t.idLocal,
-        nomeLocal: t.Local ? `${t.Local.nome} - ${t.Local.local ?? ""}` : "Não informado",
+        nomeLocal: t.sala ? `${t.sala.nome} - ${t.sala.local ?? ""}` : "Não informado",
         ativo: t.ativo
       });
     } else {
@@ -219,8 +220,6 @@ exports.getAlunosDaTurma = async (req, res) => {
   }
 };
 
-const TurmaHasAluno = require("../models/turmaHasAluno");
-
 exports.associarAlunos = async (req, res) => {
   const idTurma = parseInt(req.params.id);
   const { idsAlunos } = req.body;
@@ -250,4 +249,3 @@ exports.removerAluno = async (req, res) => {
     res.status(500).json({ message: "Erro ao remover aluno", error: err.message });
   }
 };
-

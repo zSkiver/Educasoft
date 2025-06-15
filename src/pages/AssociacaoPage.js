@@ -21,6 +21,24 @@ const AssociacaoPage = () => {
     }
   };
 
+  const handleDesativar = async (matricula, idTurma) => {
+  if (!idTurma) return alert("Turma não identificada.");
+
+  if (window.confirm("Deseja realmente desativar esta associação?")) {
+    try {
+      await apiClient.patch('/associacoes/desativar', {
+        matricula,
+        idTurma,
+      });
+      alert("Associação desativada com sucesso!");
+      fetchAssociacoes(); 
+    } catch (err) {
+      console.error("Erro ao desativar associação:", err);
+      alert("Erro ao desativar associação.");
+    }
+  }
+};
+
   const formatarHorario = (hora) => {
   if (!hora) return '--:--';
 
@@ -38,29 +56,42 @@ const AssociacaoPage = () => {
 };
 
   const columns = [
-    { Header: 'Matrícula', accessor: 'matricula' },
-    { Header: 'Aluno', accessor: 'nome' },
-    { Header: 'Turmas', accessor: 'turmas' }
-  ];
+  { Header: 'Matrícula', accessor: 'matricula' },
+  { Header: 'Aluno', accessor: 'nome' },
+  { Header: 'Turma', accessor: 'nomeTurma' },
+  { Header: 'Semestre', accessor: 'semestre_ano' },
+  { Header: 'Dia', accessor: 'dia_semana' },
+  { Header: 'Horário Início', accessor: 'horario' },
+  { Header: 'Horário Término', accessor: 'horario_termino' },
+  { Header: 'Disciplina', accessor: 'disciplina' },
+  { Header: 'Professor', accessor: 'professor' },
+  { Header: 'Sala', accessor: 'sala' },
+];
 
   const filteredData = alunos
-    .filter((aluno) => {
-      const term = search.toLowerCase();
-      return (
-        aluno.nome.toLowerCase().includes(term) ||
-        aluno.matricula.toString().includes(term)
-      );
-    })
-    .map((aluno) => ({
-      ...aluno,
-      turmas: aluno.turmas
-        .map(t => {
-          const horario = formatarHorario(t.horario);
-          const termino = formatarHorario(t.horario_termino);
-          return `${t.nome} (${t.semestre_ano}) - ${t.dia_semana} das ${horario} às ${termino}`;
-        })
-        .join(', ')
-    }));
+  .filter(aluno => aluno.turmas && aluno.turmas.length > 0)
+  .filter((aluno) => {
+    const term = search.toLowerCase();
+    return (
+      aluno.nome.toLowerCase().includes(term) ||
+      aluno.matricula.toString().includes(term)
+    );
+  })
+  .flatMap(aluno =>
+    aluno.turmas.map(turma => ({
+      matricula: aluno.matricula,
+      nome: aluno.nome,
+      nomeTurma: turma.nome,
+      semestre_ano: turma.semestre_ano,
+      dia_semana: turma.dia_semana,
+      horario: formatarHorario(turma.horario),
+      horario_termino: formatarHorario(turma.horario_termino),
+      disciplina: turma.disciplina?.nome || 'Sem disciplina',
+      professor: turma.professor?.nome || 'Sem professor',
+      sala: turma.sala?.nome || 'Sem sala',
+      idTurma: turma.idTurma
+    }))
+  );
 
   return (
     <div className="container">
@@ -79,16 +110,23 @@ const AssociacaoPage = () => {
       <div>
         <button
           className="btn btn-primary"
-          onClick={() => navigate('/turmas/associar/1')}>
+          onClick={() => navigate('/turmas/novaAssociacao/1')}>
           ➕ Associar Alunos à Turma
+        </button>
+        <button className="btn btn-secondary" onClick={() => navigate('/turmas/associacoes/reativar')}>
+          🔄 Reativar associação
         </button>
       </div>
 
       <DataTable
         columns={columns}
         data={filteredData}
-        onEdit={null}
-        onDelete={null}
+        onEdit={(row) =>
+          navigate(`/turmas/associacoes/editar/${row.idTurma}/${row.matricula}`)
+        }
+        onDelete={(row) =>
+          handleDesativar(row.matricula, row.idTurma)
+        }
       />
     </div>
   );
