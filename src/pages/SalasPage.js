@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import apiClient from '../services/api';
 import DataTable from '../components/DataTable';
-//import './SalaPage.css';
 
 const SalasPage = () => {
   const [salas, setSalas] = useState([]);

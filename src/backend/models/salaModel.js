@@ -29,6 +29,3 @@ const Sala = sequelize.define('Sala', {
 });
 
 module.exports = Sala;
-
-
-

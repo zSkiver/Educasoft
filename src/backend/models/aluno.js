@@ -31,7 +31,7 @@ const Turma = require('./turmaModel');
 Aluno.belongsToMany(Turma, {
   through: {
     model: 'turma_has_aluno',
-    scope: { ativo: true }, // filtra apenas associações ativas
+    scope: { ativo: true },
   },
   foreignKey: 'matricula',
   otherKey: 'idTurma',

@@ -1,8 +1,6 @@
 import axios from 'axios';
 
 // Define a URL base da API backend
-// Use o endereço IP local ou 'localhost' se o backend estiver rodando na mesma máquina
-// Use o endereço IP/nome do contêiner se estiver usando Docker
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
 const apiClient = axios.create({
@@ -12,7 +10,7 @@ const apiClient = axios.create({
   },
 });
 
-// Interceptor para lidar com erros (opcional, mas útil)
+// Interceptor para lidar com erros
 apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
