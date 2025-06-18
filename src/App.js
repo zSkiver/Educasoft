@@ -52,8 +52,6 @@ function App() {
               <li><Link to="/salas" className="text-blue-600 hover:underline">Salas</Link></li>
               <li><Link to="/turmas" className="text-blue-600 hover:underline">Turmas</Link></li>
               <li><Link to="/turmas/associacao" className="text-blue-600 hover:underline">Associar Alunos</Link></li>
-
-
             </ul>
           </nav>
 

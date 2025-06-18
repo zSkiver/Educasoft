@@ -83,7 +83,7 @@ const AttAssociacaoPage = () => {
           <button type="submit" className="btn btn-submit">
             Salvar
           </button>
-          <button type="button" className="btn btn-cancel" onClick={() => navigate('/associacoes')}>
+          <button type="button" className="btn btn-cancel" onClick={() => navigate('/turmas/associacao')}>
             ❌ Cancelar
           </button>
         </div>
